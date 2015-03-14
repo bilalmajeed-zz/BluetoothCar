@@ -4,6 +4,7 @@
     <!--OVERFLOW MENU TEXT-->
     <string name="action_settings">Settings</string>
     <string name="action_connect">Connect</string>
+    <string name="action_disconnect">Disconnect</string>
 
     <!--BUTTON TEXT-->
     <string name="upBtnText">FORWARDS</string>
