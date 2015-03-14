@@ -36,6 +36,12 @@ public class MainActivity extends Activity {
     boolean error = false;
     Menu optionsMenu;
 
+    //declare the direction codes
+    private final String GO_FORWARDS = "1";
+    private final String GO_BACKWARDS = "2";
+    private final String TURN_RIGHT = "3";
+    private final String TURN_LEFT = "4";
+
     //declare a few constant error messages
     private final String deviceName = "HC-06";
     private final String CONNECTION_ERROR = "Not connected to device";
@@ -100,50 +106,68 @@ public class MainActivity extends Activity {
         upBtn.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                try{
-                    output.write("1\n".getBytes());
-                }catch(Exception e){
-                    return false;
-                }
-                return true;
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    return run(GO_FORWARDS);
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                    return stop();
+
+                return false;
             }
         });
 
         downBtn.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                try{
-                    output.write("2\n".getBytes());
-                }catch(Exception e){
-                    return false;
-                }
-                return true;
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    return run(GO_BACKWARDS);
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                    return stop();
+
+                return false;
             }
         });
 
         rightBtn.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                try{
-                    output.write("3\n".getBytes());
-                }catch(Exception e){
-                    return false;
-                }
-                return true;
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    return run(TURN_RIGHT);
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                    return stop();
+
+                return false;
             }
         });
 
         leftBtn.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                try{
-                    output.write("4\n".getBytes());
-                }catch(Exception e){
-                    return false;
-                }
-                return true;
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    return run(TURN_LEFT);
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                    return stop();
+
+                return false;
             }
         });
+    }
+
+    public boolean run(String direction){
+        try{
+            output.write((direction + "\n").getBytes());
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean stop(){
+        try{
+            output.write("0\n".getBytes());
+        }catch(Exception e){
+            return false;
+        }
+        return true;
     }
 
     public void connect(){
