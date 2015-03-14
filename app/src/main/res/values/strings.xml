@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Bluetooth Car</string>
+
+    <!--OVERFLOW MENU TEXT-->
+    <string name="action_settings">Settings</string>
+    <string name="action_connect">Connect</string>
+
+    <!--BUTTON TEXT-->
+    <string name="upBtnText">FORWARDS</string>
+    <string name="downBtnText">BACKWARDS</string>
+    <string name="rightBtnText">RIGHT</string>
+    <string name="leftBtnText">LEFT</string>
+
+</resources>
