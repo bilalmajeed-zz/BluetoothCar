@@ -5,39 +5,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
-    <Button
+    <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/upBtnText"
-        android:id="@+id/upBtn"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="82dp" />
+        android:name="bilalmajeed.com.bluetoothcar.LeftRightControlFragment"
+        android:id="@+id/fragment"
+        tools:layout="@layout/left_right_control_fragment"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <Button
+    <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/downBtnText"
-        android:id="@+id/downBtn"
-        android:layout_below="@+id/leftBtn"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/leftBtnText"
-        android:id="@+id/leftBtn"
-        android:layout_below="@+id/upBtn"
-        android:layout_toLeftOf="@+id/upBtn"
-        android:layout_toStartOf="@+id/upBtn" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/rightBtnText"
-        android:id="@+id/rightBtn"
-        android:layout_above="@+id/downBtn"
-        android:layout_toRightOf="@+id/upBtn"
-        android:layout_toEndOf="@+id/upBtn" />
+        android:name="bilalmajeed.com.bluetoothcar.UpDownControlFragment"
+        android:id="@+id/fragment2"
+        tools:layout="@layout/up_down_control_fragment"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

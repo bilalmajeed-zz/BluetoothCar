@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -30,17 +31,19 @@ import java.util.Set;
 
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity
+        implements LeftRightControlFragment.LeftRightControlListener,UpDownControlFragment.UpDownControlListener{
 
     Button upBtn, downBtn, leftBtn, rightBtn;
-    boolean error = false;
     Menu optionsMenu;
+    View decorView;
 
     //declare the direction codes
     private final String GO_FORWARDS = "1";
     private final String GO_BACKWARDS = "2";
     private final String TURN_RIGHT = "3";
     private final String TURN_LEFT = "4";
+    private final String STOP = "0";
 
     //declare a few constant error messages
     private final String deviceName = "HC-06";
@@ -56,11 +59,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        upBtn = (Button) findViewById(R.id.upBtn);
-        downBtn = (Button) findViewById(R.id.downBtn);
-        leftBtn = (Button) findViewById(R.id.leftBtn);
-        rightBtn = (Button) findViewById(R.id.rightBtn);
 
         //initialize the btAdapter
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -83,8 +81,24 @@ public class MainActivity extends Activity {
             Intent turnBTOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnBTOn, 1);
         }
+    }
 
-        buttonTouchListeners();
+    @Override
+    public void getLRDirection(String direction) {
+        controlCar(direction);
+    }
+
+    @Override
+    public void getUDDirection(String direction) {
+        controlCar(direction);
+    }
+
+    public void controlCar(String direction){
+        try{
+            output.write((direction + "\n").getBytes());
+        }catch(Exception e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     final private BroadcastReceiver bt_broadcastReceiver = new BroadcastReceiver() {
@@ -101,74 +115,6 @@ public class MainActivity extends Activity {
             }
         }
     };
-
-    private void buttonTouchListeners() {
-        upBtn.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN)
-                    return run(GO_FORWARDS);
-                else if(event.getAction() == MotionEvent.ACTION_UP)
-                    return stop();
-
-                return false;
-            }
-        });
-
-        downBtn.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN)
-                    return run(GO_BACKWARDS);
-                else if(event.getAction() == MotionEvent.ACTION_UP)
-                    return stop();
-
-                return false;
-            }
-        });
-
-        rightBtn.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN)
-                    return run(TURN_RIGHT);
-                else if(event.getAction() == MotionEvent.ACTION_UP)
-                    return stop();
-
-                return false;
-            }
-        });
-
-        leftBtn.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN)
-                    return run(TURN_LEFT);
-                else if(event.getAction() == MotionEvent.ACTION_UP)
-                    return stop();
-
-                return false;
-            }
-        });
-    }
-
-    public boolean run(String direction){
-        try{
-            output.write((direction + "\n").getBytes());
-        }catch(Exception e){
-            return false;
-        }
-        return true;
-    }
-
-    public boolean stop(){
-        try{
-            output.write("0\n".getBytes());
-        }catch(Exception e){
-            return false;
-        }
-        return true;
-    }
 
     public void connect(){
 
@@ -254,13 +200,4 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try{
-            btSocket.close();
-        }catch(IOException e){
-            Toast.makeText(this, "ERROR - Could not close socket", Toast.LENGTH_LONG).show();
-        }
-    }
 }
